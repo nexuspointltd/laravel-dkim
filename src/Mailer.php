@@ -39,26 +39,28 @@ class Mailer extends \Illuminate\Mail\Mailer
         }
 
         // PATCH START
-        $privateKey = config('dkim.private_key');
-        $selector = config('dkim.selector');
-        $domain = config('dkim.domain');
-        if (in_array(strtolower(config('mail.default')), ['smtp', 'sendmail', 'log', 'ses'])) {
-            if (empty($privateKey)) {
-                throw new MissingConfigurationException('No private key set.', 1588115551);
-            }
-            if (empty($selector)) {
-                throw new MissingConfigurationException('No selector set.', 1588115373);
-            }
-            if (empty($domain)) {
-                throw new MissingConfigurationException('No domain set.', 1588115434);
-            }
+        if (config('dkim.enabled')) {
+            $privateKey = config('dkim.private_key');
+            $selector = config('dkim.selector');
+            $domain = config('dkim.domain');
+            if (in_array(strtolower(config('mail.default')), ['smtp', 'sendmail', 'log', 'ses'])) {
+                if (empty($privateKey)) {
+                    throw new MissingConfigurationException('No private key set.', 1588115551);
+                }
+                if (empty($selector)) {
+                    throw new MissingConfigurationException('No selector set.', 1588115373);
+                }
+                if (empty($domain)) {
+                    throw new MissingConfigurationException('No domain set.', 1588115434);
+                }
 
-            $message->attachDKIMSigner(
-                $privateKey,
-                $domain,
-                $selector,
-                config('dkim.passphrase')
-            );
+                $message->attachDKIMSigner(
+                    $privateKey,
+                    $domain,
+                    $selector,
+                    config('dkim.passphrase')
+                );
+            }
         }
         // PATCH END
 
