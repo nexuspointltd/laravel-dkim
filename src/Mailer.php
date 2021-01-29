@@ -42,14 +42,10 @@ class Mailer extends \Illuminate\Mail\Mailer
         $privateKey = config('dkim.private_key');
         $selector = config('dkim.selector');
         $domain = config('dkim.domain');
-        if (in_array(strtolower(config('mail.default')), ['smtp', 'sendmail', 'log'])) {
+        if (in_array(strtolower(config('mail.default')), ['smtp', 'sendmail', 'log', 'ses'])) {
             if (empty($privateKey)) {
                 throw new MissingConfigurationException('No private key set.', 1588115551);
             }
-            if (!file_exists($privateKey)) {
-                throw new InvalidArgumentException('Private key file does not exist.', 1588115609);
-            }
-
             if (empty($selector)) {
                 throw new MissingConfigurationException('No selector set.', 1588115373);
             }
@@ -58,7 +54,7 @@ class Mailer extends \Illuminate\Mail\Mailer
             }
 
             $message->attachDKIMSigner(
-                file_get_contents($privateKey),
+                $privateKey,
                 $domain,
                 $selector,
                 config('dkim.passphrase')
