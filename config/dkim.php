@@ -8,4 +8,5 @@ return [
     'passphrase' => env('DKIM_PASSPHRASE', ''),
     'algorithm' => env('DKIM_ALGORITHM', 'rsa-sha256'),
     'identity' => env('DKIM_IDENTITY', null),
+    'enabled' => env('DKIM_ENABLED', false),
 ];
