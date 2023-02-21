@@ -62,10 +62,6 @@ class Mailer extends \Illuminate\Mail\Mailer
                 if (empty($privateKey)) {
                     throw new InvalidArgumentException('No private key set.', 1588115551);
                 }
-                if (!file_exists($privateKey)) {
-                    throw new InvalidArgumentException('Private key file does not exist.', 1588115609);
-                }
-
                 if (empty($selector)) {
                     throw new InvalidArgumentException('No selector set.', 1588115373);
                 }
